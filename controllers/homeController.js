@@ -52,4 +52,19 @@ module.exports = function(app) {
         });
     });
 
+    app.put('/create-comment', function(req, res) {
+        News.findOneAndUpdate(
+            { _id: req.body.id }, 
+            { $push: { messages: req.body.comment  } },
+            function(error, success) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log(success);
+                }
+            }
+        );
+        res.json({ redirectURL: '/' });
+    });
+
 }

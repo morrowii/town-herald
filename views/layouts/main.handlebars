@@ -64,8 +64,39 @@
         $.ajax({
           url: '/clear-articles',
           method: 'DELETE',
-          success: function(data) {
-            window.location.href = data.redirectURL;
+          success: function(response) {
+            window.location.href = response.redirectURL;
+          }
+        });
+      });
+
+      $('.comment-btn').on('click', function() {
+        var id1 = $(this).attr('id');
+        var status = $(this).attr('data-status');
+        if (status === 'closed') {
+          $(`.${id1}`).removeClass('d-none');
+          $(this).attr('data-status', 'opened');
+
+        }
+        else if (status === 'opened') {
+          $(`.${id1}`).addClass('d-none');
+          $(this).attr('data-status', 'closed');
+        }
+      });
+
+      $('.submit-comment').on('click', function() {
+        var id2 = $(this).attr('id');
+        var commentData = {
+          id: id2,
+          comment: $(`.${id2}`).val()
+        };
+        console.log(commentData);
+        $.ajax({
+          url: '/create-comment',
+          method: 'PUT',
+          data: commentData,
+          success: function(response) {
+            window.location.href = response.redirectURL;
           }
         });
       });
