@@ -1,1 +1,13 @@
 
+{{#each articles}}
+
+    <div class='card text-center my-3 mx-auto w-75'>
+        <h4 class='card-header bg-dark text-white'>{{title}}</h4>
+        <h5 class='m-2'>{{synopsis}}</h5>
+        <div class='m-2'>
+            <button class='btn btn-md btn-dark' onclick="window.location.href='{{link}}';">Full Story</button>
+            <button class='btn btn-md btn-dark comment-btn'>Comments</button>
+        </div>
+    </div>
+
+{{/each}}

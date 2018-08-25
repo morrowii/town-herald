@@ -8,7 +8,8 @@ const newsSchema = new Schema({
   id: ObjectId,
   title: String,
   synopsis: String,
-  link: String
+  link: String,
+  messages: Array
 });
 
 var news = mongoose.model('News', newsSchema);

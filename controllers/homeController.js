@@ -6,9 +6,17 @@ const cheerio = require('cheerio');
 
 module.exports = function(app) {
 
-    app.get('/', function (req, res) {
+    app.get('/', function(req, res) {
+        
+        News.find(function(err, data) {
+            console.log(data);
+            res.render('home', { articles: data });
+        });
+    });
 
-        request('https://www.pcgamer.com/news/', function (error, response, body) {
+    app.get('/new-articles', async function (req, res) {
+
+        await request('https://www.pcgamer.com/news/', function (error, response, body) {
             console.log('error:', error); // Print the error if one occurred
             console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
             const $ = cheerio.load(body);
@@ -34,7 +42,14 @@ module.exports = function(app) {
             });
         });
 
-        res.render('home');
+        res.json({ redirectURL: '/' });
+    });
+
+    app.delete('/clear-articles', function(req, res) {
+        News.remove({}, function() {
+            console.log('Cleared articles.');
+            res.json({ redirectURL: '/' });
+        });
     });
 
 }
