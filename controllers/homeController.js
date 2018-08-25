@@ -9,7 +9,7 @@ module.exports = function(app) {
     app.get('/', function(req, res) {
         
         News.find(function(err, data) {
-            console.log(data);
+            console.log('Successfully returned all articles.');
             res.render('home', { articles: data });
         });
     });
@@ -55,7 +55,22 @@ module.exports = function(app) {
     app.put('/create-comment', function(req, res) {
         News.findOneAndUpdate(
             { _id: req.body.id }, 
-            { $push: { messages: req.body.comment  } },
+            { $push: { messages: req.body.comment } },
+            function(error, success) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log(success);
+                }
+            }
+        );
+        res.json({ redirectURL: '/' });
+    });
+
+    app.delete('/delete-comment', function(req, res) {
+        News.findOneAndUpdate(
+            { _id: req.body.id }, 
+            { $pull: { messages: req.body.comment } },
             function(error, success) {
                 if (error) {
                     console.log(error);

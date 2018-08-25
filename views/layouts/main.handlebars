@@ -74,12 +74,12 @@
         var id1 = $(this).attr('id');
         var status = $(this).attr('data-status');
         if (status === 'closed') {
-          $(`.${id1}`).removeClass('d-none');
+          $(`#${id1}-allComments`).removeClass('d-none');
           $(this).attr('data-status', 'opened');
 
         }
         else if (status === 'opened') {
-          $(`.${id1}`).addClass('d-none');
+          $(`#${id1}-allComments`).addClass('d-none');
           $(this).attr('data-status', 'closed');
         }
       });
@@ -88,13 +88,28 @@
         var id2 = $(this).attr('id');
         var commentData = {
           id: id2,
-          comment: $(`.${id2}`).val()
+          comment: $(`#${id2}-textArea`).val()
         };
         console.log(commentData);
         $.ajax({
           url: '/create-comment',
           method: 'PUT',
           data: commentData,
+          success: function(response) {
+            window.location.href = response.redirectURL;
+          }
+        });
+      });
+
+      $('.x-btn').on('click', function() {
+        var id3 = $(this).attr('data-commentID');
+        var commentText = $(this).attr('data-commentText');
+        var targetComment = { id: id3, comment: commentText };
+        console.log(targetComment);
+        $.ajax({
+          url: '/delete-comment',
+          method: 'DELETE',
+          data: targetComment,
           success: function(response) {
             window.location.href = response.redirectURL;
           }
